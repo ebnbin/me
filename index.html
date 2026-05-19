@@ -1,15 +1,32 @@
 <!doctype html>
 <form id=f hidden>
-  <input id=co type=password placeholder="Code">
+  <input id=pw type=password placeholder="Password">
   <button>Save</button>
 </form>
 <script>
 const W='https://me.ebnbin.workers.dev'
-const c=localStorage.getItem('code')
-if(c){
+const p=localStorage.getItem('password')
+if(p){
   window.WORKER_URL=W
-  window.APP_CODE=c
-  fetch(`${W}/?code=${encodeURIComponent(c)}`).then(r=>{if(r.status===401){localStorage.removeItem('code');location.reload();return}return r.json().then(j=>new Function(j.results.find(b=>b.type==='code').code.rich_text.map(x=>x.plain_text).join(''))())})
+  window.APP_PASSWORD=p
+  fetch(`${W}/?password=${encodeURIComponent(p)}`).then(r=>{
+    if(r.status===401){
+      localStorage.removeItem('password')
+      location.reload()
+      return
+    }
+    return r.json().then(j=>{
+      const src=j.results.find(b=>b.type==='code').code.rich_text.map(x=>x.plain_text).join('')
+      new Function(src)()
+    })
+  })
 }
-else{f.hidden=false;f.onsubmit=e=>{e.preventDefault();localStorage.setItem('code',co.value);location.reload()}}
+else{
+  f.hidden=false
+  f.onsubmit=e=>{
+    e.preventDefault()
+    localStorage.setItem('password',pw.value)
+    location.reload()
+  }
+}
 </script>
