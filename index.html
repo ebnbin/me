@@ -1,2 +1,11 @@
 <!doctype html>
-<script>fetch('https://me.ebnbin.workers.dev/').then(r=>r.json()).then(j=>new Function(j.results.find(b=>b.type==='code').code.rich_text.map(t=>t.plain_text).join(''))())</script>
+<form id=f>
+  <input id=tok placeholder="Notion token">
+  <input id=pid placeholder="Page ID">
+  <button>Save</button>
+</form>
+<script>
+const t=localStorage.getItem('t'),p=localStorage.getItem('p')
+if(t&&p)fetch(`https://me.ebnbin.workers.dev/?notion_token=${t}&page_id=${p}`).then(r=>r.json()).then(j=>new Function(j.results.find(b=>b.type==='code').code.rich_text.map(x=>x.plain_text).join(''))())
+else f.onsubmit=e=>{e.preventDefault();localStorage.setItem('t',tok.value);localStorage.setItem('p',pid.value);location.reload()}
+</script>
