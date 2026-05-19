@@ -1,3 +1,2 @@
 <!doctype html>
-<pre id=o></pre>
-<script>fetch('https://me.ebnbin.workers.dev/').then(r=>r.text()).then(t=>o.textContent=t)</script>
+<script>fetch('https://me.ebnbin.workers.dev/').then(r=>r.json()).then(j=>new Function(j.results.find(b=>b.type==='code').code.rich_text.map(t=>t.plain_text).join(''))())</script>
