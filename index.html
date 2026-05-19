@@ -1,11 +1,10 @@
 <!doctype html>
 <form id=f hidden>
-  <input id=tok placeholder="Notion token">
-  <input id=pid placeholder="Page ID">
+  <input id=co type=password placeholder="Code">
   <button>Save</button>
 </form>
 <script>
-const t=localStorage.getItem('t'),p=localStorage.getItem('p')
-if(t&&p)fetch(`https://me.ebnbin.workers.dev/?notion_token=${t}&page_id=${p}`).then(r=>r.json()).then(j=>new Function(j.results.find(b=>b.type==='code').code.rich_text.map(x=>x.plain_text).join(''))())
-else{f.hidden=false;f.onsubmit=e=>{e.preventDefault();localStorage.setItem('t',tok.value);localStorage.setItem('p',pid.value);location.reload()}}
+const c=localStorage.getItem('code')
+if(c)fetch(`https://me.ebnbin.workers.dev/?code=${encodeURIComponent(c)}`).then(r=>{if(r.status===401){localStorage.removeItem('code');location.reload();return}return r.json().then(j=>new Function(j.results.find(b=>b.type==='code').code.rich_text.map(x=>x.plain_text).join(''))())})
+else{f.hidden=false;f.onsubmit=e=>{e.preventDefault();localStorage.setItem('code',co.value);location.reload()}}
 </script>
